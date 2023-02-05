@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        /**
+         * 封装的defineReactive函数本质就是利用闭包的属性,让形参作为第三者.不管是访问值
+         * 还是设置值,都是对形参进行的一次操作!
+        */
+        let obj = {}
+        function defineReactive(obj, key, val) {
+            /**
+             * 函数形参的写法等价于
+             * let obj=undfined
+             * let key=undfined
+             * let val=undfined
+             * 
+            */
+
+            Object.defineProperty(obj, key, {
+                enumerable: true,
+                configurable: true,
+                /**
+                 * writable value不能和执行器属性同时出现
+                */
+                /**
+                 * 执行器函数中,val变量引用了外层作用域的变量,所以val不会被销毁.形成了闭包!
+                 * 形参val充当了'第三者'
+                */
+                get() {
+                    console.log(key, '属性被访问');
+                    return val
+                },
+                set(newVal) {
+                    console.log(key, '被赋值');
+                    val = newVal
+                }
+
+            })
+        }
+        defineReactive(obj, 'count', 0)
+        defineReactive(obj, 'age', 20)
+
+    </script>
+</body>
+
+</html>
